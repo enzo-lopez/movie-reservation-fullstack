@@ -108,4 +108,3 @@ export default function Booking({ params }: { params: { movieId: string } }) {
     </div>
   )
 }
-

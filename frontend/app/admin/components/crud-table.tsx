@@ -110,4 +110,3 @@ export function CrudTable<T extends { id: string }>({
     </div>
   )
 }
-
