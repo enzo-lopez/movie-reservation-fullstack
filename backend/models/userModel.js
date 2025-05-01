@@ -12,7 +12,16 @@ export class UserModel {
   }
 
   static async getAllUsers() {
-    return User.find()
+    let users = await User.find()
+    users = users.map(user => {
+      return {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      }
+    })
+    return users
   }
 
   static async getUserById({id}) {
