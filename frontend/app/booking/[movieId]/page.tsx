@@ -11,15 +11,21 @@ interface Seat {
   isAvaible: boolean
 }
 
-const seats: Seat[] = [
-  { row: "A", numberSeat: 1, isAvaible: true },
-  { row: "A", numberSeat: 2, isAvaible: true },
-  { row: "A", numberSeat: 3, isAvaible: true },
-  { row: "B", numberSeat: 1, isAvaible: true },
-  { row: "B", numberSeat: 2, isAvaible: true },
-  { row: "B", numberSeat: 3, isAvaible: true },
-  // Add more seats as needed
-]
+const generateSeats = (): Seat[] => {
+  const rows = ["A", "B", "C", "D", "E", "F"]
+  const seatsPerRow = 6
+  const seats: Seat[] = []
+
+  rows.forEach((row) => {
+    for (let numberSeat = 1; numberSeat <= seatsPerRow; numberSeat++) {
+      seats.push({ row, numberSeat, isAvaible: true })
+    }
+  })
+
+  return seats
+}
+
+const seats = generateSeats()
 
 export default function Booking({ params }: { params: { movieId: string } }) {
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
