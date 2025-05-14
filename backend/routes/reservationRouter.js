@@ -13,6 +13,7 @@ export const reservationRouter = () => {
     authenticateToken,
     reservationController.createUserReservation
   )
+  // Devuelve las reservas del usuario logueado
   router.get('/', authenticateToken, reservationController.getUserReservations)
 
   // Admin

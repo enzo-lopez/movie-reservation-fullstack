@@ -12,7 +12,7 @@ export class UserModel {
   }
 
   static async getAllUsers() {
-    let users = User.find()
+    let users = await User.find()
     users = users.map(user => {
       return {
         id: user._id,
@@ -21,11 +21,11 @@ export class UserModel {
         role: user.role,
       }
     })
-    return 'users'
+    return users
   }
 
   static async getUserById({id}) {
-    return User.findById({id})
+    return await User.findOne({_id:id}).populate('reservation')
   }
 
   static async updateUser({id, data}) {

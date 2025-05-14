@@ -20,7 +20,9 @@ export default function MovieDetails() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/movie/${id}`)
+        const response = await fetch(
+          `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/movie/${id}`
+        )
         if (!response.ok) {
           throw new Error('Error al obtener los detalles de la película')
         }
@@ -43,12 +45,13 @@ export default function MovieDetails() {
   const handleBooking = () => {
     if (user && movie) {
       const bookingData = {
-        movie: movie._id,
-        date: format(selectedDate, 'yyyy-MM-dd'),
-        time: selectedTime,
+        movieId: movie._id, 
+        movie: movie.title, 
+        date: format(selectedDate, 'yyyy-MM-dd'), 
+        time: selectedTime, 
       }
       router.push(
-        `/booking/${id}?${new URLSearchParams(bookingData as any).toString()}`
+        `/booking/${movie._id}?${new URLSearchParams(bookingData).toString()}`
       )
     } else {
       router.push('/login')

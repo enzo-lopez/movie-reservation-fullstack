@@ -24,7 +24,7 @@ export default function UsersPage() {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`, // Si necesitas autenticación
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           }
         )
@@ -34,7 +34,6 @@ export default function UsersPage() {
         }
 
         const data = await response.json()
-        console.log(data)
         setUsers(data)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error desconocido')
@@ -52,18 +51,79 @@ export default function UsersPage() {
     {key: 'role' as const, label: 'Role'},
   ]
 
-  const handleAdd = (user: Partial<User>) => {
-    setUsers([...users, {...user, id: Date.now().toString()} as User])
+  const handleAdd = async (user: Partial<User>) => {
+    try {
+      const response = await fetch(
+        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/register`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify(user),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Error al agregar el usuario')
+      }
+
+      const newUser = await response.json()
+      setUsers([...users, newUser.usuario])
+    } catch (err) {
+      console.error(err)
+      alert('Error al agregar el usuario')
+    }
   }
 
-  const handleEdit = (id: string, updatedUser: Partial<User>) => {
-    setUsers(
-      users.map(user => (user.id === id ? {...user, ...updatedUser} : user))
-    )
+  const handleEdit = async (id: string, updatedUser: Partial<User>) => {
+    try {
+      const response = await fetch(
+        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify(updatedUser),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Error al editar el usuario')
+      }
+
+      const updatedUserData = await response.json()
+      setUsers(users.map(user => (user.id === id ? updatedUserData : user)))
+    } catch (err) {
+      console.error(err)
+      alert('Error al editar el usuario')
+    }
   }
 
-  const handleDelete = (id: string) => {
-    setUsers(users.filter(user => user.id !== id))
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el usuario')
+      }
+
+      setUsers(users.filter(user => user.id !== id))
+    } catch (err) {
+      console.error(err)
+      alert('Error al eliminar el usuario')
+    }
   }
 
   if (loading) {
