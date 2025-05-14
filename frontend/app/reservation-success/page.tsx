@@ -41,7 +41,7 @@ export default function ReservationSuccess() {
               Asientos:{" "}
               {seats
                 ? JSON.parse(seats)
-                    .map((seat: any) => `${seat.row}${seat.numberSeat}`)
+                    .map((seat: { row: string; numberSeat: number }) => `${seat.row}${seat.numberSeat}`)
                     .join(", ")
                 : "N/A"}
             </li>

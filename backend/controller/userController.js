@@ -51,6 +51,7 @@ export class UserController {
       )
 
       const userResponse = {
+        id: user._id,
         username: user.username,
         email: user.email,
         role: user.role,

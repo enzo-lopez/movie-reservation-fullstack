@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react'
 import {useParams, useRouter, useSearchParams} from 'next/navigation'
 import {useAppContext} from '../../contexts/AppContext'
 import {Button} from '@/components/ui/button'
+import {format, addDays} from 'date-fns'
 
 interface Seat {
   row: string
@@ -72,7 +73,7 @@ export default function Booking() {
     }
 
     const reservationData = {
-      userId: user.id,
+      user: user.id,
       movieId: movieId,
       movie: movieId,
       date: selectedDate,
@@ -81,6 +82,7 @@ export default function Booking() {
     }
 
     try {
+      console.log('Usuario:', user) // Verifica el usuario
       console.log('Datos de reserva:', reservationData) // Verifica los datos de reserva
       const response = await fetch('http://localhost:3001/reservation', {
         method: 'POST',
@@ -94,7 +96,12 @@ export default function Booking() {
       if (response.ok) {
         const result = await response.json()
         router.push(
-          `/reservation-success?${new URLSearchParams(result).toString()}`
+          `/reservation-success?${new URLSearchParams({
+            movieName: result.movieName,
+            date: format(addDays(new Date(result.date), 1), 'yyyy-MM-dd'),
+            time: result.time,
+            seats: JSON.stringify(result.seats), // Serializa el array de asientos como JSON
+          }).toString()}`
         )
       } else {
         console.error('Error al crear la reserva: ', response.statusText)
