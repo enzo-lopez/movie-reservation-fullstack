@@ -40,6 +40,7 @@ export default function MoviesPage() {
   const [editingMovie, setEditingMovie] = useState<Movie | null>(null)
   const [formData, setFormData] = useState<Partial<Movie>>({})
 
+
   const columns = [
     {key: 'title' as const, label: 'Title'},
     {key: 'genre' as const, label: 'Genre'},
@@ -51,7 +52,7 @@ export default function MoviesPage() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('http://localhost:3001/movie')
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/movie`)
         if (!response.ok) {
           throw new Error('Error fetching movies')
         }
@@ -68,7 +69,8 @@ export default function MoviesPage() {
 
   const handleAdd = async (movie: Partial<Movie>) => {
     try {
-      const response = await fetch('http://localhost:3001/movie', {
+      console.log('Adding movie:', movie)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/movie`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,13 +87,13 @@ export default function MoviesPage() {
       setMovies([...movies, newMovie])
     } catch (err) {
       console.error(err)
-      alert('Error adding movie')
+      alert('Error adding movie' )
     }
   }
 
   const handleEdit = async (id: string, updatedMovie: Partial<Movie>) => {
     try {
-      const response = await fetch(`http://localhost:3001/movie/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/movie/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +118,7 @@ export default function MoviesPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/movie/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/movie/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,

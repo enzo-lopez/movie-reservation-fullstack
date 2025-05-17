@@ -13,7 +13,7 @@ mongo.connectToMongo
 app.use(express.json())
 
 const PORT = process.env.PORT_BACKEND
-app.use(cors({origin: `http://localhost:3000`}))
+app.use(cors({origin: `${process.env.NEXT_PUBLIC_FRONTEND_URL}`}))
 
 app.use('/user', userRouter())
 app.use('/movie', movieRouter())

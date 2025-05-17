@@ -19,7 +19,7 @@ export default function UsersPage() {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user`,
           {
             method: 'GET',
             headers: {
@@ -54,7 +54,7 @@ export default function UsersPage() {
   const handleAdd = async (user: Partial<User>) => {
     try {
       const response = await fetch(
-        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/register`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/register`,
         {
           method: 'POST',
           headers: {
@@ -80,7 +80,7 @@ export default function UsersPage() {
   const handleEdit = async (id: string, updatedUser: Partial<User>) => {
     try {
       const response = await fetch(
-        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`,
         {
           method: 'PUT',
           headers: {
@@ -106,7 +106,7 @@ export default function UsersPage() {
   const handleDelete = async (id: string) => {
     try {
       const response = await fetch(
-        `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/user/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${id}`,
         {
           method: 'DELETE',
           headers: {

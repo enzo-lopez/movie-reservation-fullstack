@@ -22,8 +22,8 @@ export default function Navbar() {
             <>
               <span>Hola, {user.username}</span>
               <Link href="/reservations">
-                <Button variant="ghost" size="icon">
-                  <History className="h-[1.2rem] w-[1.2rem]" />
+                <Button variant="outline">
+                  Mis reservas
                 </Button>
               </Link>
               {user.role === "ADMIN" && (

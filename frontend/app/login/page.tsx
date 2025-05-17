@@ -19,7 +19,7 @@ export default function Login() {
     setError(null) // Limpia errores previos
 
     try {
-      const response = await fetch('http://localhost:3001/user/login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

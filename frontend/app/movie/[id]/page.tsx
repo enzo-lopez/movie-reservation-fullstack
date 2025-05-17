@@ -21,7 +21,7 @@ export default function MovieDetails() {
     const fetchMovie = async () => {
       try {
         const response = await fetch(
-          `http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/movie/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/movie/${id}`
         )
         if (!response.ok) {
           throw new Error('Error al obtener los detalles de la película')
@@ -45,7 +45,6 @@ export default function MovieDetails() {
   const handleBooking = () => {
     if (user && movie) {
       const bookingData = {
-        movieId: movie._id, 
         movie: movie.title, 
         date: format(selectedDate, 'yyyy-MM-dd'), 
         time: selectedTime, 

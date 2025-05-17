@@ -16,8 +16,8 @@ const cinemaRoomSchema = new mongoose.Schema({
 export const CinemaRoom = mongoose.model('cinemaRoom', cinemaRoomSchema)
 
 export function generateSeats() {
-  const rows = ['A', 'B', 'C']
-  const seatsPerRow = 5
+  const rows = ['A', 'B', 'C', 'D', 'E']
+  const seatsPerRow = 7
   const seats = []
 
   rows.forEach(row => {

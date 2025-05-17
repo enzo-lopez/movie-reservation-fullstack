@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`http://localhost:${PORT}/movie`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/movie`)
         if (!response.ok) {
           throw new Error('Error al obtener las películas')
         }

@@ -6,7 +6,7 @@ export class CinemaRoomController {
   }
 
   getCinemaRoom = async (req, res) => {
-    const {date, time, movie} = req.body
+    const {date, time, movie} = req.query
     const cinemaRoom = await this.CinemaRoomModel.getCinemaRoom({
       date,
       time,

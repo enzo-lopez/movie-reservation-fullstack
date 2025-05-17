@@ -4,7 +4,6 @@ export class CinemaRoomModel {
   static async getCinemaRoom({date, time, movie}) {
     try {
       let cinemaRoom = await CinemaRoom.findOne({date, time, movie})
-
       if (!cinemaRoom) {
         // Se genera un cine temporal, con asientos vacios
         cinemaRoom = {
@@ -18,7 +17,7 @@ export class CinemaRoomModel {
 
       return cinemaRoom
     } catch (error) {
-      return {error: 'Error getting the cinema room'}
+      return {error: 'Error getting the cinema room: ' + error.message}
     }
   }
 

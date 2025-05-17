@@ -27,8 +27,6 @@ const generateSeats = (): Seat[] => {
   return seats
 }
 
-const seats = generateSeats()
-
 export default function Booking() {
   const params = useParams()
   const {movieId} = params
@@ -40,6 +38,7 @@ export default function Booking() {
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
   const [selectedDate, setSelectedDate] = useState<string>(initialDate || '') // Inicializa con el valor de los parámetros
   const [selectedTime, setSelectedTime] = useState<string>(initialTime || '') // Inicializa con el valor de los parámetros
+  const [seats, setSeats] = useState<Seat[]>([])
   const {user} = useAppContext()
   const router = useRouter()
 
@@ -48,6 +47,37 @@ export default function Booking() {
       router.push('/login')
     }
   }, [user, router])
+
+  useEffect(() => {
+    const fetchSeats = async () => {
+      if (!selectedDate || !selectedTime || !movieId) return
+      try {
+        const params = new URLSearchParams({
+          date: selectedDate,
+          time: selectedTime,
+          movie: Array.isArray(movieId) ? movieId[0] : movieId,
+        })
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/cinema-room/?${params.toString()}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setSeats(data.cinemaRoom.seats || [])
+        } else {
+          setSeats([]) // fallback
+        }
+      } catch (e) {
+        setSeats([])
+      }
+    }
+
+    fetchSeats()
+  }, [selectedDate, selectedTime, movieId])
 
   const toggleSeat = (seat: Seat) => {
     if (
@@ -82,9 +112,7 @@ export default function Booking() {
     }
 
     try {
-      console.log('Usuario:', user) // Verifica el usuario
-      console.log('Datos de reserva:', reservationData) // Verifica los datos de reserva
-      const response = await fetch('http://localhost:3001/reservation', {
+       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reservation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +153,7 @@ export default function Booking() {
             className='border rounded p-2'
             value={selectedDate} // Asegúrate de que sea un valor válido
             onChange={e => setSelectedDate(e.target.value)}
-            required
+            disabled
           />
         </div>
         <div>
@@ -135,34 +163,35 @@ export default function Booking() {
             className='border rounded p-2'
             value={selectedTime} // Asegúrate de que sea un valor válido
             onChange={e => setSelectedTime(e.target.value)}
-            required
+            disabled
           />
         </div>
       </div>
       <div className='space-y-4 mb-6'>
         {rows.map(row => (
-          <div key={row} className='flex justify-center gap-4'>
+            <div key={row} className='flex justify-center gap-4'>
             {seats
               .filter(seat => seat.row === row)
               .map(seat => (
-                <Button
-                  key={`${seat.row}${seat.numberSeat}`}
-                  disabled={!seat.isAvaible}
-                  variant={
-                    selectedSeats.some(
-                      s =>
-                        s.row === seat.row && s.numberSeat === seat.numberSeat
-                    )
-                      ? 'default'
-                      : 'outline'
-                  }
-                  onClick={() => toggleSeat(seat)}
-                >
-                  {seat.row}
-                  {seat.numberSeat}
-                </Button>
+              <Button
+                key={`${seat.row}${seat.numberSeat}`}
+                disabled={!seat.isAvaible}
+                variant={
+                selectedSeats.some(
+                  s =>
+                  s.row === seat.row && s.numberSeat === seat.numberSeat
+                )
+                  ? 'default'
+                  : 'outline'
+                }
+                onClick={() => toggleSeat(seat)}
+                className={!seat.isAvaible ? 'text-red-600' : ''}
+              >
+                {seat.row}
+                {seat.numberSeat}
+              </Button>
               ))}
-          </div>
+            </div>
         ))}
       </div>
       <div className='mb-4'>

@@ -29,7 +29,7 @@ export default function ReservationsPage() {
 
     const fetchReservations = async () => {
       try {
-        const response = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT_BACKEND}/reservation`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reservation`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
