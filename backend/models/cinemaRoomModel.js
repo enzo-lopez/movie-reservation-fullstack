@@ -23,7 +23,10 @@ export class CinemaRoomModel {
 
   static async getAll() {
     try {
-      const cinemaRooms = await CinemaRoom.find().populate('movie')
+      const cinemaRooms = await CinemaRoom.find().populate({
+        path: 'movie',
+        select: 'title'
+      })
       return cinemaRooms
     } catch (error) {
       return {error: 'Error getting all cinema rooms'}

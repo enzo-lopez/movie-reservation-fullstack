@@ -23,7 +23,7 @@ export class CinemaRoomController {
     if (cinemaRooms.error) {
       return res.status(401).json({error: cinemaRooms.error})
     }
-    res.status(201).json({cinemaRooms: cinemaRooms})
+    res.status(201).json(cinemaRooms)
   }
 
   getCinemaRoomByFilter = async (req, res) => {

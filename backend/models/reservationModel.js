@@ -42,7 +42,7 @@ export class ReservationModel {
       .populate('movie')
 
       const reservationsWithDetails = reservations.map(reservation => ({
-        reservationId: reservation._id,
+        _id: reservation._id,
         username: reservation.user && reservation.user.username ? reservation.user.username : 'Unknown',
         movieName: reservation.movie.title,
         date: reservation.date,

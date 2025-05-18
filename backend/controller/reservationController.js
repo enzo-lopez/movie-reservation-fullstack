@@ -95,7 +95,7 @@ export class ReservationController {
 
   getAllReservations = async (req, res) => {
     const allRervations = await this.ReservationModel.getAllReservations()
-    return res.status(201).json({Reservations: allRervations})
+    return res.status(201).json(allRervations)
   }
 
   delete = async (req, res) => {

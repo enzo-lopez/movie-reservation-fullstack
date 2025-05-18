@@ -31,7 +31,7 @@ export const reservationRouter = () => {
     isAdmin,
     reservationController.getUserReservationById
   )
-
+  
   router.delete(
     '/:id',
     authenticateToken,
