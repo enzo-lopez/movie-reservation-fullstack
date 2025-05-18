@@ -56,9 +56,25 @@ export function CrudTable<T extends {id: string}>({
     <div className='space-y-4'>
       <div className='flex justify-between items-center'>
         <h2 className='text-2xl font-bold'>{title}</h2>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <Dialog
+          open={isAddDialogOpen}
+          onOpenChange={open => {
+            setIsAddDialogOpen(open)
+            if (!open) {
+              setEditingItem(null)
+              setFormData({})
+            }
+          }}
+        >
           <DialogTrigger asChild>
-            <Button>Add New</Button>
+            <Button
+              onClick={() => {
+                setEditingItem(null)
+                setFormData({})
+              }}
+            >
+              Add New
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -68,20 +84,62 @@ export function CrudTable<T extends {id: string}>({
             </DialogHeader>
             <form onSubmit={handleSubmit} className='space-y-4'>
               {/* Campos personalizados */}
-              {columns.map(column => (
-                <div key={String(column.key)}>
+              {columns.map(column => {
+                // Para usuarios: solo mostrar el campo rol al editar
+                if (title === 'Users' && column.key === 'role' && !editingItem)
+                  return null
+                return (
+                  <div key={String(column.key)}>
+                    <label className='block text-sm font-medium mb-1'>
+                      {column.label}
+                    </label>
+                    {title === 'Users' && column.key === 'role' ? (
+                      <select
+                        value={(formData[column.key] as string) || ''}
+                        onChange={e =>
+                          setFormData({
+                            ...formData,
+                            [column.key]: e.target.value,
+                          })
+                        }
+                        required
+                        className='border rounded p-2 w-full'
+                      >
+                        <option value=''>Selecciona un rol</option>
+                        <option value='USER'>Usuario</option>
+                        <option value='ADMIN'>Administrador</option>
+                      </select>
+                    ) : (
+                      <Input
+                        value={(formData[column.key] as string) || ''}
+                        onChange={e =>
+                          setFormData({
+                            ...formData,
+                            [column.key]: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    )}
+                  </div>
+                )
+              })}
+              {/* Campo contraseña solo al agregar usuario */}
+              {title === 'Users' && !editingItem && (
+                <div>
                   <label className='block text-sm font-medium mb-1'>
-                    {column.label}
+                    Contraseña
                   </label>
                   <Input
-                    value={(formData[column.key] as string) || ''}
+                    type='password'
+                    value={(formData as any).password || ''}
                     onChange={e =>
-                      setFormData({...formData, [column.key]: e.target.value})
+                      setFormData({...formData, password: e.target.value})
                     }
                     required
                   />
                 </div>
-              ))}
+              )}
               <Button type='submit'>{editingItem ? 'Update' : 'Add'}</Button>
             </form>
           </DialogContent>

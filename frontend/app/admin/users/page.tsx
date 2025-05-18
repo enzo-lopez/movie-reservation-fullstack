@@ -8,6 +8,7 @@ interface User {
   username: string
   email: string
   role: 'USER' | 'ADMIN'
+  password: string
 }
 
 export default function UsersPage() {
@@ -53,6 +54,7 @@ export default function UsersPage() {
 
   const handleAdd = async (user: Partial<User>) => {
     try {
+      console.log('Adding user:', user)
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/register`,
         {

@@ -36,8 +36,6 @@ export class MovieModel {
   }
 
   static async create({input}) {
-    input.trailer = ''
-    console.log('input', input)
     const newMovie = new Movies({...input})
     await newMovie.save()
 
