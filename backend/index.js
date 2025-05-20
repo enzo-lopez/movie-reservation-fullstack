@@ -12,7 +12,7 @@ mongo.connectToMongo
 
 app.use(express.json())
 
-const PORT = process.env.PORT_BACKEND
+const PORT = process.env.PORT || process.env.PORT_BACKEND || 3001
 app.use(cors({origin: `${process.env.NEXT_PUBLIC_FRONTEND_URL}`}))
 
 app.use('/user', userRouter())
@@ -21,5 +21,5 @@ app.use('/cinema-room', cinemaRoomRouter())
 app.use('/reservation', reservationRouter())
 
 app.listen(PORT, () => {
-  console.log(`listening on port http://localhost:${PORT}/`)
+  console.log(`listening on port ${PORT}/`)
 })
