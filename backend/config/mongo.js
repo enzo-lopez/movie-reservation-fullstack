@@ -11,3 +11,4 @@ async function connectToMongo() {
 }
 
 export default connectToMongo()
+

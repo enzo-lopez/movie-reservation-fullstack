@@ -96,7 +96,6 @@ export default function ReservationsPage() {
             },
           }
         )
-        console.log(response)
         if (!response.ok) {
           throw new Error('Error deleting reservation')
         }

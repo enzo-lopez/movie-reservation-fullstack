@@ -16,16 +16,19 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null) // Limpia errores previos
+    setError(null)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email: username, password}),
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email: username, password}),
+        }
+      )
 
       if (!response.ok) {
         const errorData = await response.json()
@@ -34,7 +37,6 @@ export default function Login() {
 
       const data = await response.json()
 
-      // Guarda el usuario y el token en el contexto y localStorage
       login({
         id: data.id,
         username: data.username,
@@ -42,8 +44,72 @@ export default function Login() {
         role: data.role,
       })
       localStorage.setItem('token', data.token)
+      router.push('/')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error desconocido')
+    }
+  }
 
-      // Redirige al usuario a la página principal
+  // Función para login rápido como admin
+  const handleAdminLogin = async () => {
+    setError(null)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email: 'admin@admin.com', password: 'admin'}),
+        }
+      )
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al iniciar sesión como admin')
+      }
+      const data = await response.json()
+      login({
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+      })
+      localStorage.setItem('token', data.token)
+      router.push('/')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error desconocido')
+    }
+  }
+
+  // Función para login rápido como invitado
+  const handleGuestLogin = async () => {
+    setError(null)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email: 'invitado@invitado.com', password: 'invitado'}),
+        }
+      )
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(
+          errorData.error || 'Error al iniciar sesión como invitado'
+        )
+      }
+      const data = await response.json()
+      login({
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+      })
+      localStorage.setItem('token', data.token)
       router.push('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido')
@@ -79,6 +145,17 @@ export default function Login() {
           Iniciar sesión
         </Button>
       </form>
+      <div className='flex flex-col gap-2 mt-6'>
+        <Button variant='outline' onClick={() => router.push('/register')}>
+          ¿No tienes cuenta? Regístrate
+        </Button>
+        <Button variant='secondary' onClick={handleAdminLogin}>
+          Iniciar sesión como admin
+        </Button>
+        <Button variant='secondary' onClick={handleGuestLogin}>
+          Iniciar sesión como invitado
+        </Button>
+      </div>
     </div>
   )
 }

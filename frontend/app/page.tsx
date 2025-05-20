@@ -5,8 +5,6 @@ import {useEffect, useState} from 'react'
 import Link from 'next/link'
 import {Card, CardContent} from '@/components/ui/card'
 
-const PORT = 3001 // Puerto del backend
-
 export default function Home() {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(true)

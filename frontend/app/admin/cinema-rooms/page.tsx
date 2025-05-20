@@ -1,50 +1,98 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { CrudTable } from "../components/crud-table"
+import {useState, useEffect} from 'react'
+import {CrudTable} from '../components/crud-table'
 
 interface CinemaRoom {
-  id: string
-  name: string
-  capacity: string
-  status: "Active" | "Maintenance"
+  _id: string
+  movie: {
+    _id: string
+    title: string
+  }
+  date: string
+  time: string
+  seats: {
+    row: string
+    numberSeat: number
+    isAvaible: boolean
+    _id: string
+  }[]
+  __v: number
 }
 
-const initialRooms: CinemaRoom[] = [
-  { id: "1", name: "Sala 1", capacity: "100", status: "Active" },
-  { id: "2", name: "Sala 2", capacity: "80", status: "Active" },
-  { id: "3", name: "Sala 3", capacity: "120", status: "Maintenance" },
-]
-
 export default function CinemaRoomsPage() {
-  const [rooms, setRooms] = useState(initialRooms)
+  const [rooms, setRooms] = useState<CinemaRoom[]>([])
 
   const columns = [
-    { key: "name" as const, label: "Name" },
-    { key: "capacity" as const, label: "Capacity" },
-    { key: "status" as const, label: "Status" },
+    {key: 'movie' as const, label: 'Movie'},
+    {key: 'date' as const, label: 'Date'},
+    {key: 'time' as const, label: 'Time'},
   ]
 
-  const handleAdd = (room: Partial<CinemaRoom>) => {
-    setRooms([...rooms, { ...room, id: Date.now().toString() } as CinemaRoom])
-  }
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/cinema-room/all`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        if (!response.ok) {
+          throw new Error('Error fetching cinema rooms')
+        }
+        const data = await response.json()
+        setRooms(Array.isArray(data) ? data : [])
+      } catch (err) {
+        console.error(err)
+        setRooms([])
+      }
+    }
+    fetchRooms()
+  }, [])
 
-  const handleEdit = (id: string, updatedRoom: Partial<CinemaRoom>) => {
-    setRooms(rooms.map((room) => (room.id === id ? { ...room, ...updatedRoom } : room)))
-  }
-
-  const handleDelete = (id: string) => {
-    setRooms(rooms.filter((room) => room.id !== id))
+  // Renderizado personalizado para las columnas
+  const renderItem = (room: CinemaRoom, columnKey: keyof CinemaRoom) => {
+    if (columnKey === 'movie') {
+      return room.movie?.title || ''
+    }
+    if (columnKey === 'date') {
+      return room.date.split('T')[0]
+    }
+    return (room as any)[columnKey]
   }
 
   return (
-    <CrudTable
-      title="Cinema Rooms"
-      items={rooms}
-      columns={columns}
-      onAdd={handleAdd}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-    />
+    <div className='space-y-4'>
+      <h2 className='text-2xl font-bold'>Cinema Rooms</h2>
+      <div className='border rounded-lg'>
+        <table className='w-full'>
+          <thead>
+            <tr>
+              {columns.map(column => (
+                <th key={column.key} className='p-2 text-left'>
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rooms.map(room => (
+              <tr key={room._id}>
+                {columns.map(column => (
+                  <td key={column.key} className='p-2'>
+                    {renderItem(room, column.key)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }

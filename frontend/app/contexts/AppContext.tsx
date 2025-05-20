@@ -2,6 +2,7 @@
 
 import type React from 'react'
 import {createContext, useContext, useState, useEffect} from 'react'
+import {useRouter} from 'next/navigation'
 
 type User = {
   id: string
@@ -40,6 +41,7 @@ export function AppProvider({children}: {children: React.ReactNode}) {
 
   const logout = () => {
     setUser(null)
+    localStorage.removeItem('token')
   }
 
   return (
