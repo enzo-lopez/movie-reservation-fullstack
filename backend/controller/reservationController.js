@@ -23,7 +23,7 @@ export class ReservationController {
   }
 
   createUserReservation = async (req, res) => {
-    const {userId, movie, date, time, seats} = req.body
+    const {user, movie, date, time, seats} = req.body
 
     // Verificar si la sala de cine existe
     // Si no existe, se crea una nueva sala Cinema Room
@@ -39,7 +39,7 @@ export class ReservationController {
       return res.status(400).json({error: cinemaRoom.error})
     }
     const reservation = {
-      user: userId,
+      user,
       movie,
       date,
       time,
@@ -54,10 +54,10 @@ export class ReservationController {
 
     // Si el guardado de la reserva fue exitoso
     // Agregamos la reserva a la lista de reservas del usuario
-    const user = await User.findById(reservation.user)
-    user.reservation.push(newUserReservation._id)
+    const userToUpdate = await User.findById(reservation.user)
+    userToUpdate.reservation.push(newUserReservation._id)
 
-    await user.save()
+    await userToUpdate.save()
 
     const newUserReservationPopulated =
       await newUserReservation.populate('movie')
@@ -95,7 +95,7 @@ export class ReservationController {
 
   getAllReservations = async (req, res) => {
     const allRervations = await this.ReservationModel.getAllReservations()
-    return res.status(201).json({Reservations: allRervations})
+    return res.status(201).json(allRervations)
   }
 
   delete = async (req, res) => {

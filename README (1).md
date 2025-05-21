@@ -4,16 +4,19 @@ Aplicación de reserva de entradas de cine desarrollada con Next.js y React.
 
 ## Integración de API - Guía Rápida
 
-Este documento indica los archivos específicos donde se deben implementar las llamadas a la API.
+Este documento indica los archivos específicos donde se deben implementar las
+llamadas a la API.
 
 ### Películas
 
 **Listado de películas**
+
 - **Archivo**: `app/page.tsx`
 - **Ubicación**: Reemplazar el array `movies` por una llamada a la API
 - **Endpoint sugerido**: `GET /api/movies`
 
 **Detalles de película**
+
 - **Archivo**: `app/movie/[id]/page.tsx`
 - **Ubicación**: Reemplazar el objeto `movieDetails` por una llamada a la API
 - **Endpoint sugerido**: `GET /api/movies/{id}`
@@ -21,11 +24,13 @@ Este documento indica los archivos específicos donde se deben implementar las l
 ### Reservas
 
 **Creación de reservas**
+
 - **Archivo**: `app/booking/[movieId]/page.tsx`
 - **Ubicación**: Función `handleBooking()`
 - **Endpoint actual**: `POST /api/reservations`
 
 **Listado de reservas del usuario**
+
 - **Archivo**: `app/reservations/page.tsx`
 - **Ubicación**: Reemplazar el array `mockReservations` por una llamada a la API
 - **Endpoint sugerido**: `GET /api/users/{userId}/reservations`
@@ -33,11 +38,13 @@ Este documento indica los archivos específicos donde se deben implementar las l
 ### Autenticación
 
 **Login**
+
 - **Archivo**: `app/login/page.tsx`
 - **Ubicación**: Función `handleSubmit()`
 - **Endpoint sugerido**: `POST /api/auth/login`
 
 **Registro**
+
 - **Archivo**: `app/register/page.tsx`
 - **Ubicación**: Función `handleSubmit()`
 - **Endpoint sugerido**: `POST /api/auth/register`
@@ -45,6 +52,7 @@ Este documento indica los archivos específicos donde se deben implementar las l
 ### Administración
 
 **Gestión de usuarios**
+
 - **Archivo**: `app/admin/users/page.tsx`
 - **Ubicación**: Reemplazar el array `initialUsers` y las funciones CRUD
 - **Endpoints sugeridos**:
@@ -54,6 +62,7 @@ Este documento indica los archivos específicos donde se deben implementar las l
   - Eliminar: `DELETE /api/users/{id}`
 
 **Gestión de películas**
+
 - **Archivo**: `app/admin/movies/page.tsx`
 - **Ubicación**: Reemplazar el array `initialMovies` y las funciones CRUD
 - **Endpoints sugeridos**:
@@ -63,6 +72,7 @@ Este documento indica los archivos específicos donde se deben implementar las l
   - Eliminar: `DELETE /api/movies/{id}`
 
 **Gestión de salas de cine**
+
 - **Archivo**: `app/admin/cinema-rooms/page.tsx`
 - **Ubicación**: Reemplazar el array `initialRooms` y las funciones CRUD
 - **Endpoints sugeridos**:
@@ -72,6 +82,7 @@ Este documento indica los archivos específicos donde se deben implementar las l
   - Eliminar: `DELETE /api/cinema-rooms/{id}`
 
 **Gestión de reservas**
+
 - **Archivo**: `app/admin/reservations/page.tsx`
 - **Ubicación**: Reemplazar el array `initialReservations` y las funciones CRUD
 - **Endpoints sugeridos**:
@@ -118,3 +129,4 @@ npm install
 
 # Iniciar servidor de desarrollo
 npm run dev
+```

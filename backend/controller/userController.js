@@ -50,7 +50,15 @@ export class UserController {
         {expiresIn: process.env.JWT_EXPIRES_IN}
       )
 
-      res.status(200).json({token})
+      const userResponse = {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        token: token,
+      }
+
+      res.status(200).json(userResponse)
     } catch (error) {
       res.status(500).json({error: 'Error trying to login'})
     }

@@ -4,7 +4,6 @@ export class CinemaRoomModel {
   static async getCinemaRoom({date, time, movie}) {
     try {
       let cinemaRoom = await CinemaRoom.findOne({date, time, movie})
-
       if (!cinemaRoom) {
         // Se genera un cine temporal, con asientos vacios
         cinemaRoom = {
@@ -18,13 +17,16 @@ export class CinemaRoomModel {
 
       return cinemaRoom
     } catch (error) {
-      return {error: 'Error getting the cinema room'}
+      return {error: 'Error getting the cinema room: ' + error.message}
     }
   }
 
   static async getAll() {
     try {
-      const cinemaRooms = await CinemaRoom.find().populate('movie')
+      const cinemaRooms = await CinemaRoom.find().populate({
+        path: 'movie',
+        select: 'title'
+      })
       return cinemaRooms
     } catch (error) {
       return {error: 'Error getting all cinema rooms'}

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import mongo from './config/mongo.js'
 import {movieRouter} from './routes/movieRouter.js'
@@ -11,15 +12,14 @@ mongo.connectToMongo
 
 app.use(express.json())
 
-app.use(cors({origin: 'http://localhost:3000'})) // Cambia el puerto según tu frontend
+const PORT = process.env.PORT || process.env.PORT_BACKEND || 3001
+app.use(cors({origin: `${process.env.NEXT_PUBLIC_FRONTEND_URL}`}))
 
 app.use('/user', userRouter())
 app.use('/movie', movieRouter())
 app.use('/cinema-room', cinemaRoomRouter())
 app.use('/reservation', reservationRouter())
 
-const PORT = 3001
-
 app.listen(PORT, () => {
-  console.log(`listening on port http://localhost:${PORT}/`)
+  console.log(`listening on port ${PORT}/`)
 })

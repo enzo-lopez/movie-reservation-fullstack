@@ -35,13 +35,13 @@ export default function ReservationSuccess() {
           <p className="mb-4">Tu reserva ha sido confirmada con los siguientes detalles:</p>
           <ul className="list-disc list-inside mb-6">
             <li>Película: {movieName}</li>
-            <li>Fecha: {new Date(date!).toLocaleDateString()}</li>
+            <li>Fecha: {date}</li>
             <li>Hora: {time}</li>
             <li>
               Asientos:{" "}
               {seats
                 ? JSON.parse(seats)
-                    .map((seat: any) => `${seat.row}${seat.numberSeat}`)
+                    .map((seat: { row: string; numberSeat: number }) => `${seat.row}${seat.numberSeat}`)
                     .join(", ")
                 : "N/A"}
             </li>
@@ -52,4 +52,3 @@ export default function ReservationSuccess() {
     </div>
   )
 }
-

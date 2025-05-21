@@ -25,7 +25,7 @@ export class UserModel {
   }
 
   static async getUserById({id}) {
-    return User.findById({id})
+    return await User.findOne({_id:id}).populate('reservation')
   }
 
   static async updateUser({id, data}) {

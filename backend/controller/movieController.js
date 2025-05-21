@@ -25,6 +25,7 @@ export class MovieController {
   }
 
   create = async (req, res) => {
+    req.body.trailer = ''
     const result = validateMovie(req.body)
 
     if (result.error) {

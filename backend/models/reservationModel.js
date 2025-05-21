@@ -1,10 +1,6 @@
-import {
-  // TitleReservation,
-  UserReservation,
-} from '../schemas/reservationSchema.js'
+import {UserReservation} from '../schemas/reservationSchema.js'
 
-// id Pelicula: 673a45fcc477dbf8de2e04cd
-// userReservation tambien lleva date y time por parametro
+
 
 export class ReservationModel {
   static async createUserReservation({reservation}) {
@@ -14,23 +10,40 @@ export class ReservationModel {
 
       return newUserReservation
     } catch (error) {
-      return {error: 'Error while creating the reservation'}
+      return {error: 'Error while creating the reservation: '}
     }
   }
 
   static async getUserReservations({userId}) {
-    return await UserReservation.find({user: userId})
+    try {
+      const reservations = await UserReservation.find({user: userId})
+      .populate('user')
+      .populate('movie')
+
+      const reservationsWithDetails = reservations.map(reservation => ({
+        reservationId: reservation._id,
+        username: reservation.user && reservation.user.username ? reservation.user.username : 'Unknown',
+        movieName: reservation.movie.title,
+        date: reservation.date.toISOString().split('T')[0], // Format date to YYYY-MM-DD
+        time: reservation.time,
+        seats: reservation.seats,
+      }))
+
+      return reservationsWithDetails
+    } catch (error) {
+      return {error: 'Error while fetching reservations: ' + error.message}
+    }
   }
 
   static async getAllReservations() {
     try {
       const reservations = await UserReservation.find()
-        .populate('movie')
-        .populate('user')
+      .populate('user')
+      .populate('movie')
 
       const reservationsWithDetails = reservations.map(reservation => ({
         _id: reservation._id,
-        username: reservation.user.username,
+        username: reservation.user && reservation.user.username ? reservation.user.username : 'Unknown',
         movieName: reservation.movie.title,
         date: reservation.date,
         time: reservation.time,
@@ -39,7 +52,7 @@ export class ReservationModel {
 
       return reservationsWithDetails
     } catch (error) {
-      return {error: 'Error while fetching reservations'}
+      return {error: 'Error while fetching reservations: ' + error.message}
     }
   }
 

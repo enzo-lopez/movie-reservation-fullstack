@@ -12,6 +12,8 @@ export const userRouter = () => {
 
   router.post('/register', userController.register)
 
+
+  // Admin
   router.get('/', authenticateToken, isAdmin, userController.getAllUsers)
 
   router.get('/:id', authenticateToken, isAdmin, userController.getUserById)
