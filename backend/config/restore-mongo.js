@@ -1,8 +1,13 @@
-// restore-mongo.js
-const {exec} = require('child_process')
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { exec } from 'child_process'
+import 'dotenv/config'
 
-const MONGO_URI = 'TU_MONGO_URI' // Cambia esto por tu URI real de MongoDB Atlas
-const BACKUP_PATH = './backup' // Cambia esto si tu backup está en otra ruta
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const MONGO_URI = process.env.MONGO_URI
+const BACKUP_PATH = path.resolve(__dirname, '../../backup')
 
 const command = `mongorestore --drop --uri="${MONGO_URI}" "${BACKUP_PATH}"`
 
