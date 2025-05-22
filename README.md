@@ -163,7 +163,7 @@ Consulta el archivo `backend/src/routes` para ver todas las rutas disponibles.
 
 ## Autores
 
-- Tu Nombre - [Enzo Lopez](https://github.com/enzo-lopez)
+- [Enzo Lopez](https://github.com/enzo-lopez)
 
 ---
 
